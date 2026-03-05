@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADHD Daily Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0c0c10;
+  --bg2:       #13131a;
+  --bg3:       #1a1a24;
+  --bg4:       #22222f;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.12);
+  --text:      #eeeef5;
+  --muted:     #6b6b8a;
+  --muted2:    #9090b0;
+  --lime:      #c8f135;
+  --lime-dim:  rgba(200,241,53,0.12);
+  --violet:    #8b5cf6;
+  --violet-dim:rgba(139,92,246,0.12);
+  --coral:     #ff6b6b;
+  --coral-dim: rgba(255,107,107,0.12);
+  --gold:      #fbbf24;
+  --gold-dim:  rgba(251,191,36,0.12);
+  --cyan:      #22d3ee;
+  --cyan-dim:  rgba(34,211,238,0.1);
+  --r:         12px;
+  --r2:        18px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::after {
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:0.025;pointer-events:none;z-index:9999;
+}
+
+/* ── GLOW BLOBS ── */
+.blob {
+  position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;
+}
+.blob-1 { width:500px;height:500px;background:rgba(139,92,246,0.07);top:-100px;right:-100px; }
+.blob-2 { width:400px;height:400px;background:rgba(200,241,53,0.05);bottom:-80px;left:-80px; }
+
+/* ── HEADER ── */
+.header {
+  position:sticky;top:0;z-index:100;
+  background:rgba(12,12,16,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 28px;
+  height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;
+}
+
+.logo {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;letter-spacing:2px;
+  color:var(--text);
+  display:flex;align-items:center;gap:10px;
+}
+.logo-dot { width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime); }
+
+.header-date {
+  font-size:12px;color:var(--muted2);font-weight:500;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:999px;padding:5px 14px;
+}
+
+.header-right { display:flex;align-items:center;gap:10px; }
+
+/* day progress in header */
+.hprog {
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:var(--muted2);
+}
+.hprog-bar {
+  width:80px;height:4px;background:var(--bg4);border-radius:999px;overflow:hidden;
+}
+.hprog-fill {
+  height:100%;background:linear-gradient(90deg,var(--violet),var(--lime));
+  border-radius:999px;width:0%;transition:width 0.6s cubic-bezier(.4,0,.2,1);
+}
+.hprog-pct { color:var(--lime);font-weight:700;min-width:32px; }
+
+/* ── NAV TABS ── */
+.nav {
+  display:flex;gap:4px;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:0 28px;overflow-x:auto;
+  scrollbar-width:none;
+}
+.nav::-webkit-scrollbar{display:none;}
+.nav-tab {
+  padding:12px 18px;
+  font-size:12px;font-weight:600;letter-spacing:0.5px;
+  color:var(--muted);cursor:pointer;white-space:nowrap;
+  border-bottom:2px solid transparent;
+  transition:all 0.2s;user-select:none;
+  display:flex;align-items:center;gap:6px;
+}
+.nav-tab:hover{color:var(--text);}
+.nav-tab.active{color:var(--lime);border-bottom-color:var(--lime);}
+
+/* ── PAGES ── */
+.page { display:none;padding:28px;max-width:900px;margin:0 auto;position:relative;z-index:1; }
+.page.active { display:block;animation:fadeUp 0.35s ease; }
+
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(14px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ── CARDS ── */
+.card {
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r2);padding:22px;margin-bottom:16px;
+  transition:border-color 0.2s;
+}
+.card:hover{border-color:var(--border2);}
+
+.card-accent-lime  { border-left:3px solid var(--lime); }
+.card-accent-violet{ border-left:3px solid var(--violet); }
+.card-accent-coral { border-left:3px solid var(--coral); }
+.card-accent-gold  { border-left:3px solid var(--gold); }
+.card-accent-cyan  { border-left:3px solid var(--cyan); }
+
+.card-title {
+  font-size:10px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;color:var(--muted);
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.card-title span { font-size:14px; }
+
+/* ── TEXTAREA ── */
+textarea {
+  width:100%;background:transparent;border:none;outline:none;
+  color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;line-height:1.75;resize:none;
+  font-weight:300;
+}
+textarea::placeholder{color:var(--muted);}
+textarea::-webkit-scrollbar{width:3px;}
+textarea::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px;}
+
+/* ── SECTION HEADING ── */
+.sec-head {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px;letter-spacing:2px;
+  color:var(--text);margin-bottom:6px;
+}
+.sec-sub { font-size:13px;color:var(--muted);margin-bottom:20px;font-weight:300; }
+
+/* ── MOOD GRID ── */
+.mood-grid{display:flex;gap:8px;flex-wrap:wrap;}
+.mood-btn {
+  background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:10px 16px;
+  font-size:20px;cursor:pointer;transition:all 0.2s;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.mood-btn span{font-size:10px;color:var(--muted);font-weight:600;}
+.mood-btn:hover,.mood-btn.active{
+  border-color:var(--lime);background:var(--lime-dim);
+  transform:translateY(-2px);
+}
+
+/* ── ENERGY SLIDER ── */
+.slider-wrap{padding:4px 0;}
+input[type=range]{
+  width:100%;-webkit-appearance:none;
+  height:5px;border-radius:999px;background:var(--bg4);outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+  background:var(--lime);cursor:pointer;
+  box-shadow:0 0 0 4px rgba(200,241,53,0.2),0 0 12px rgba(200,241,53,0.4);
+  transition:box-shadow 0.2s;
+}
+input[type=range]::-webkit-slider-thumb:hover{
+  box-shadow:0 0 0 6px rgba(200,241,53,0.25),0 0 20px rgba(200,241,53,0.5);
+}
+.slider-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px;}
+
+/* ── FOCUS TAGS ── */
+.tag-group{display:flex;gap:8px;flex-wrap:wrap;}
+.ftag {
+  background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:999px;padding:6px 14px;
+  font-size:11px;font-weight:600;color:var(--muted);
+  cursor:pointer;transition:all 0.2s;letter-spacing:0.3px;
+}
+.ftag:hover,.ftag.active{border-color:var(--violet);color:var(--violet);background:var(--violet-dim);}
+
+/* ── CHECKLIST ── */
+.check-item {
+  display:flex;align-items:flex-start;gap:12px;
+  padding:12px 14px;margin-bottom:8px;
+  background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:var(--r);cursor:pointer;transition:all 0.2s;
+  position:relative;overflow:hidden;
+}
+.check-item::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:0;
+  background:linear-gradient(90deg,rgba(200,241,53,0.06),transparent);
+  transition:width 0.3s;
+}
+.check-item:hover{border-color:var(--border2);}
+.check-item.done{border-color:rgba(200,241,53,0.3);}
+.check-item.done::before{width:100%;}
+
+.check-box {
+  width:22px;height:22px;border-radius:7px;flex-shrink:0;
+  border:2px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;transition:all 0.2s;margin-top:1px;
+}
+.check-item.done .check-box{background:var(--lime);border-color:var(--lime);color:#0c0c10;}
+.check-content{flex:1;}
+.check-label{font-size:14px;font-weight:500;transition:all 0.2s;}
+.check-item.done .check-label{color:var(--muted);text-decoration:line-through;}
+.check-sub{font-size:11px;color:var(--muted);margin-top:2px;font-weight:300;}
+
+/* ── PRIORITY TASKS ── */
+.task-row {
+  display:flex;align-items:center;gap:12px;
+  background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:12px 14px;margin-bottom:8px;
+  transition:all 0.2s;
+}
+.task-row:focus-within{border-color:var(--violet);background:rgba(139,92,246,0.04);}
+.task-num{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  color:var(--violet);opacity:0.4;min-width:20px;line-height:1;
+}
+.task-inp{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:400;
+}
+.task-inp::placeholder{color:var(--muted);}
+.task-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* ── TIME BLOCKS ── */
+.time-grid{display:flex;flex-direction:column;gap:4px;}
+.time-row{display:flex;align-items:center;gap:12px;}
+.time-lbl{
+  font-size:10px;font-weight:700;color:var(--muted);
+  min-width:58px;letter-spacing:0.3px;font-family:'Bebas Neue',sans-serif;
+  font-size:13px;
+}
+.time-inp{
+  flex:1;background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;padding:9px 14px;
+  color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;outline:none;transition:all 0.2s;font-weight:300;
+}
+.time-inp:focus{border-color:var(--violet);background:rgba(139,92,246,0.04);}
+.time-inp.work{border-left:2px solid var(--violet);}
+.time-inp.rest{border-left:2px solid var(--lime);}
+.time-inp.food{border-left:2px solid var(--gold);}
+
+/* ── WATER TRACKER ── */
+.water-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+.wdrop{
+  font-size:24px;cursor:pointer;opacity:0.2;
+  transition:all 0.25s;filter:grayscale(1);
+  user-select:none;
+}
+.wdrop.on{opacity:1;filter:none;transform:scale(1.1);}
+
+/* ── MEDS ── */
+.meds-btn {
+  display:flex;align-items:center;gap:12px;
+  background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:14px 16px;cursor:pointer;
+  transition:all 0.2s;
+}
+.meds-btn:hover{border-color:var(--gold);}
+.meds-btn.done{border-color:var(--gold);background:var(--gold-dim);}
+.meds-icon{font-size:20px;}
+.meds-text{flex:1;}
+.meds-title{font-size:14px;font-weight:600;}
+.meds-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.meds-status{font-size:11px;font-weight:700;color:var(--muted);}
+.meds-btn.done .meds-status{color:var(--gold);}
+
+/* ── POMODORO ── */
+.pomo-wrap{text-align:center;padding:8px 0;}
+.pomo-ring{
+  width:160px;height:160px;border-radius:50%;
+  border:3px solid var(--bg4);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  margin:0 auto 20px;position:relative;
+  background:var(--bg3);
+}
+.pomo-ring svg{position:absolute;top:0;left:0;transform:rotate(-90deg);}
+.pomo-ring circle{
+  fill:none;stroke:var(--coral);stroke-width:3;
+  stroke-linecap:round;stroke-dasharray:483;stroke-dashoffset:483;
+  transition:stroke-dashoffset 1s linear;
+}
+.pomo-time{
+  font-family:'Bebas Neue',sans-serif;font-size:42px;
+  letter-spacing:2px;color:var(--text);line-height:1;
+}
+.pomo-label{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px;}
+.pomo-btns{display:flex;gap:8px;justify-content:center;}
+.pomo-btn{
+  background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:10px 22px;
+  color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:12px;font-weight:700;cursor:pointer;
+  letter-spacing:0.5px;transition:all 0.2s;
+}
+.pomo-btn.start{border-color:var(--coral);color:var(--coral);}
+.pomo-btn.start:hover,.pomo-btn.start.running{background:var(--coral);color:#fff;}
+.pomo-btn:hover{border-color:var(--border2);}
+.pomo-dots{display:flex;gap:6px;justify-content:center;margin:14px 0;}
+.pdot{width:8px;height:8px;border-radius:50%;background:var(--bg4);transition:all 0.3s;}
+.pdot.done{background:var(--coral);box-shadow:0 0 8px var(--coral);}
+.pomo-session{font-size:11px;color:var(--muted);margin-top:4px;}
+
+/* ── HABIT TRACKER ── */
+.habit-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:12px 14px;
+  margin-bottom:8px;cursor:pointer;transition:all 0.2s;
+}
+.habit-item:hover{border-color:var(--border2);}
+.habit-item.done{border-color:rgba(200,241,53,0.3);background:rgba(200,241,53,0.04);}
+.habit-circle{
+  width:24px;height:24px;border-radius:50%;
+  border:2px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;flex-shrink:0;transition:all 0.2s;
+}
+.habit-item.done .habit-circle{background:var(--lime);border-color:var(--lime);color:#0c0c10;}
+.habit-name{font-size:13px;font-weight:500;flex:1;}
+.habit-streak{font-size:11px;color:var(--gold);font-weight:700;}
+
+/* ── REWARD ── */
+.reward-card{
+  background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(200,241,53,0.06));
+  border:1.5px solid rgba(139,92,246,0.25);
+  border-radius:var(--r2);padding:20px;
+}
+.reward-card .card-title{color:rgba(139,92,246,0.8);}
+
+/* ── REFLECTION PROMPTS ── */
+.prompt-list{display:flex;flex-direction:column;gap:12px;}
+.prompt-item{}
+.prompt-q{font-size:12px;font-weight:700;color:var(--muted2);margin-bottom:6px;letter-spacing:0.3px;}
+.prompt-inp{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--r);padding:10px 14px;
+  color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;outline:none;resize:none;min-height:64px;
+  transition:all 0.2s;line-height:1.6;font-weight:300;
+}
+.prompt-inp:focus{border-color:var(--violet);}
+.prompt-inp::placeholder{color:var(--muted);}
+
+/* ── WIN BANNER ── */
+.win-row{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(200,241,53,0.05);
+  border:1.5px dashed rgba(200,241,53,0.2);
+  border-radius:var(--r);padding:12px 16px;margin-bottom:16px;
+}
+.win-icon{font-size:20px;}
+.win-inp{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--lime);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;font-weight:500;
+}
+.win-inp::placeholder{color:rgba(200,241,53,0.3);}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px;}
+.stat-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r2);padding:18px;text-align:center;
+}
+.stat-val{
+  font-family:'Bebas Neue',sans-serif;font-size:40px;
+  letter-spacing:1px;line-height:1;margin-bottom:4px;
+}
+.stat-lbl{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:0.5px;}
+
+/* ── TWO COL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:640px){.two-col{grid-template-columns:1fr;}}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px;}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:var(--r);padding:12px 18px;
+  font-size:13px;font-weight:500;color:var(--text);
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+  transform:translateY(80px);opacity:0;
+  transition:all 0.3s cubic-bezier(.4,0,.2,1);
+  z-index:9998;display:flex;align-items:center;gap:8px;
+}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* ── SAVE BTN ── */
+.save-btn{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:var(--lime);color:#0c0c10;border:none;
+  border-radius:999px;padding:12px 28px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 24px rgba(200,241,53,0.3);
+  transition:all 0.2s;z-index:100;letter-spacing:0.3px;
+  display:flex;align-items:center;gap:8px;
+}
+.save-btn:hover{transform:translateX(-50%) translateY(-2px);box-shadow:0 8px 32px rgba(200,241,53,0.4);}
+
+/* ── PRINT HIDE ── */
+@media print{.header,.nav,.save-btn,.blob{display:none!important;}.page{display:block!important;padding:20px;}.card{break-inside:avoid;}}
+
+/* ── RESPONSIVE: TABLET (max 768px) ── */
+@media(max-width:768px){
+  .header { padding:0 16px; gap:10px; }
+  .hprog-bar { width:56px; }
+  .header-date { display:none; }
+  .logo { font-size:18px; }
+  .nav { padding:0 12px; }
+  .nav-tab { padding:10px 12px; font-size:11px; }
+  .page { padding:18px 16px 80px; }
+  .sec-head { font-size:22px; }
+  .two-col { grid-template-columns:1fr; }
+  .stats-grid { grid-template-columns:repeat(2,1fr); }
+  .pomo-ring { width:140px; height:140px; }
+  .pomo-ring svg { width:140px; height:140px; }
+  .pomo-time { font-size:36px; }
+  .mood-grid { justify-content:center; }
+  .time-lbl { min-width:48px; font-size:11px; }
+  .time-inp { font-size:12px; padding:8px 10px; }
+  .save-btn { bottom:16px; padding:11px 22px; font-size:12px; }
+}
+
+/* ── RESPONSIVE: MOBILE (max 480px) ── */
+@media(max-width:480px){
+  .header { height:52px; }
+  .logo { font-size:16px; gap:8px; }
+  .logo-dot { width:7px; height:7px; }
+  .hprog { gap:6px; }
+  .hprog-bar { width:44px; }
+  .hprog-pct { font-size:11px; }
+  .nav-tab { padding:9px 10px; font-size:10px; gap:4px; }
+  .page { padding:14px 12px 90px; }
+  .sec-head { font-size:20px; }
+  .sec-sub { font-size:12px; }
+  .card { padding:16px; border-radius:14px; }
+  .card-title { font-size:9px; }
+  .mood-btn { padding:8px 10px; }
+  .mood-btn span:last-child { font-size:9px; }
+  .task-row { padding:10px 12px; }
+  .task-inp { font-size:13px; }
+  .task-num { font-size:18px; }
+  .check-item { padding:10px 12px; }
+  .check-label { font-size:13px; }
+  .habit-item { padding:10px 12px; }
+  .habit-name { font-size:12px; }
+  .pomo-ring { width:130px; height:130px; }
+  .pomo-ring svg { width:130px; height:130px; }
+  .pomo-time { font-size:32px; }
+  .pomo-btn { padding:9px 16px; font-size:11px; }
+  .time-row { gap:8px; }
+  .time-lbl { min-width:42px; font-size:10px; }
+  .time-inp { font-size:11px; padding:7px 8px; }
+  .wdrop { font-size:22px; }
+  .win-row { padding:10px 12px; }
+  .win-inp { font-size:12px; }
+  .prompt-inp { font-size:12px; }
+  .stat-val { font-size:32px; }
+  .save-btn { width:calc(100% - 24px); left:12px; transform:none; border-radius:12px; justify-content:center; bottom:12px; }
+  .save-btn:hover { transform:none; }
+  .stats-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
+  .tag-group { gap:6px; }
+  .ftag { padding:5px 11px; font-size:10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-dot"></div>
+    ADHD PLANNER
+  </div>
+  <div class="header-date" id="headerDate"></div>
+  <div class="header-right">
+    <div class="hprog">
+      <div class="hprog-bar"><div class="hprog-fill" id="hprogFill"></div></div>
+      <span class="hprog-pct" id="hprogPct">0%</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-tab active" onclick="goTab(0)" id="tab0">🧠 Brain + Mood</div>
+  <div class="nav-tab" onclick="goTab(1)" id="tab1">🎯 Tasks</div>
+  <div class="nav-tab" onclick="goTab(2)" id="tab2">⏱ Time Blocks</div>
+  <div class="nav-tab" onclick="goTab(3)" id="tab3">🍅 Pomodoro</div>
+  <div class="nav-tab" onclick="goTab(4)" id="tab4">✅ Habits</div>
+  <div class="nav-tab" onclick="goTab(5)" id="tab5">💊 Body</div>
+  <div class="nav-tab" onclick="goTab(6)" id="tab6">🌙 Reflect</div>
+</div>
+
+<!-- ───── PAGE 0: BRAIN + MOOD ───── -->
+<div class="page active" id="page0">
+  <div class="sec-head">START HERE</div>
+  <div class="sec-sub">Empty your head before anything else. 2 minutes. Every day.</div>
+
+  <div class="win-row">
+    <span class="win-icon">🏆</span>
+    <input class="win-inp" id="winInput" type="text" placeholder="What would make today a WIN?  (write it now)">
+  </div>
+
+  <div class="card card-accent-coral">
+    <div class="card-title"><span>⚡</span> Brain Dump — Get it ALL out</div>
+    <textarea id="brainDump" rows="6" placeholder="Every task, worry, idea, random thought swirling in your head — dump it here. Don't filter. Just write. You can sort it later..."></textarea>
+  </div>
+
+  <div class="two-col">
+    <div class="card card-accent-lime">
+      <div class="card-title"><span>😊</span> How are you feeling?</div>
+      <div class="mood-grid">
+        <div class="mood-btn" onclick="setMood(this,'😩')" data-mood="😩"><span style="font-size:22px">😩</span><span>Rough</span></div>
+        <div class="mood-btn" onclick="setMood(this,'😕')" data-mood="😕"><span style="font-size:22px">😕</span><span>Meh</span></div>
+        <div class="mood-btn" onclick="setMood(this,'😐')" data-mood="😐"><span style="font-size:22px">😐</span><span>OK</span></div>
+        <div class="mood-btn" onclick="setMood(this,'🙂')" data-mood="🙂"><span style="font-size:22px">🙂</span><span>Good</span></div>
+        <div class="mood-btn" onclick="setMood(this,'🤩')" data-mood="🤩"><span style="font-size:22px">🤩</span><span>Great</span></div>
+      </div>
+    </div>
+
+    <div class="card card-accent-violet">
+      <div class="card-title"><span>⚡</span> Energy Level</div>
+      <div class="slider-wrap" style="margin-top:8px;">
+        <input type="range" min="1" max="5" value="3" id="energySlider" oninput="updateEnergy(this)">
+        <div class="slider-labels"><span>🪫 Drained</span><span id="energyVal" style="color:var(--lime);font-weight:700;">3/5</span><span>⚡ Charged</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>🎯</span> Focus Mode Today</div>
+    <div class="tag-group">
+      <div class="ftag" onclick="toggleTag(this)">Deep Work</div>
+      <div class="ftag" onclick="toggleTag(this)">Creative</div>
+      <div class="ftag" onclick="toggleTag(this)">Admin</div>
+      <div class="ftag" onclick="toggleTag(this)">Rest Day</div>
+      <div class="ftag" onclick="toggleTag(this)">Social</div>
+      <div class="ftag" onclick="toggleTag(this)">Learning</div>
+      <div class="ftag" onclick="toggleTag(this)">Exercise</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── PAGE 1: TASKS ───── -->
+<div class="page" id="page1">
+  <div class="sec-head">TOP 3 TASKS</div>
+  <div class="sec-sub">Only 3. That's the rule. ADHD brains do better with less, not more.</div>
+
+  <div class="card card-accent-violet" style="margin-bottom:20px;">
+    <div class="card-title"><span>🎯</span> Must-Do's — pick your top 3</div>
+    <div class="task-row">
+      <span class="task-num">1</span>
+      <input class="task-inp" id="task1" type="text" placeholder="Your single most important task today..." oninput="calcProgress()">
+      <div class="task-dot" style="background:var(--coral);box-shadow:0 0 8px var(--coral);" title="High"></div>
+    </div>
+    <div class="task-row">
+      <span class="task-num">2</span>
+      <input class="task-inp" id="task2" type="text" placeholder="Second priority..." oninput="calcProgress()">
+      <div class="task-dot" style="background:var(--gold);box-shadow:0 0 8px var(--gold);" title="Medium"></div>
+    </div>
+    <div class="task-row">
+      <span class="task-num">3</span>
+      <input class="task-inp" id="task3" type="text" placeholder="Nice to finish..." oninput="calcProgress()">
+      <div class="task-dot" style="background:var(--lime);box-shadow:0 0 8px var(--lime);" title="Low"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>📋</span> Extra Tasks (overflow — do after Top 3)</div>
+    <div id="extraList"></div>
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <input id="extraInp" type="text" placeholder="Add extra task..." style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 14px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;outline:none;" onkeydown="if(event.key==='Enter')addExtra()">
+      <button onclick="addExtra()" style="background:var(--violet);border:none;border-radius:8px;padding:9px 16px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;">+ Add</button>
+    </div>
+  </div>
+
+  <div class="reward-card">
+    <div class="card-title"><span>🎁</span> Today's Reward</div>
+    <textarea id="rewardTxt" rows="2" placeholder="What treat do you get when you finish your Top 3? Be specific — your brain needs this dopamine hook..."></textarea>
+  </div>
+</div>
+
+<!-- ───── PAGE 2: TIME BLOCKS ───── -->
+<div class="page" id="page2">
+  <div class="sec-head">TIME BLOCKS</div>
+  <div class="sec-sub">Structure your day. Protect your focus. Schedule breaks.</div>
+
+  <div class="card card-accent-cyan">
+    <div class="card-title"><span>🕐</span> Schedule your day — click any block to edit</div>
+    <div class="time-grid">
+      <div class="time-row"><span class="time-lbl">6–7 AM</span><input class="time-inp rest" placeholder="Wake up / Morning routine..."></div>
+      <div class="time-row"><span class="time-lbl">7–8 AM</span><input class="time-inp rest" placeholder="Movement / exercise / breakfast..."></div>
+      <div class="time-row"><span class="time-lbl">8–10 AM</span><input class="time-inp work" placeholder="🔵 Deep work block 1 — hardest task goes here..."></div>
+      <div class="time-row"><span class="time-lbl">10–10:30</span><input class="time-inp rest" placeholder="☕ Break — move, drink water, breathe..."></div>
+      <div class="time-row"><span class="time-lbl">10:30–12</span><input class="time-inp work" placeholder="🔵 Deep work block 2..."></div>
+      <div class="time-row"><span class="time-lbl">12–1 PM</span><input class="time-inp food" placeholder="🍽 Lunch — step away from screen..."></div>
+      <div class="time-row"><span class="time-lbl">1–2 PM</span><input class="time-inp rest" placeholder="Low effort tasks / emails / calls..."></div>
+      <div class="time-row"><span class="time-lbl">2–4 PM</span><input class="time-inp work" placeholder="🔵 Deep work block 3 / admin..."></div>
+      <div class="time-row"><span class="time-lbl">4–4:30</span><input class="time-inp rest" placeholder="☕ Afternoon break — snack, walk outside..."></div>
+      <div class="time-row"><span class="time-lbl">4:30–6</span><input class="time-inp work" placeholder="Wrap up / review / planning tomorrow..."></div>
+      <div class="time-row"><span class="time-lbl">6–8 PM</span><input class="time-inp food" placeholder="Dinner / family / personal time..."></div>
+      <div class="time-row"><span class="time-lbl">8–10 PM</span><input class="time-inp rest" placeholder="Wind down — no screens, read, relax..."></div>
+    </div>
+  </div>
+
+  <div class="card" style="background:rgba(34,211,238,0.04);border-color:rgba(34,211,238,0.15);">
+    <div class="card-title"><span>💡</span> Time Block Rules for ADHD</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="check-item" onclick="this.classList.toggle('done');this.querySelector('.check-box').textContent=this.classList.contains('done')?'✓':''">
+        <div class="check-box"></div><div class="check-content"><div class="check-label">Schedule breaks BEFORE you need them</div><div class="check-sub">ADHD brains don't notice fatigue until it's too late</div></div>
+      </div>
+      <div class="check-item" onclick="this.classList.toggle('done');this.querySelector('.check-box').textContent=this.classList.contains('done')?'✓':''">
+        <div class="check-box"></div><div class="check-content"><div class="check-label">Put hardest task in your first deep work block</div><div class="check-sub">Morning = peak dopamine + lowest distraction</div></div>
+      </div>
+      <div class="check-item" onclick="this.classList.toggle('done');this.querySelector('.check-box').textContent=this.classList.contains('done')?'✓':''">
+        <div class="check-box"></div><div class="check-content"><div class="check-label">Use time blocking as a guide, not a prison</div><div class="check-sub">Shift blocks when needed — done beats perfect</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── PAGE 3: POMODORO ───── -->
+<div class="page" id="page3">
+  <div class="sec-head">POMODORO TIMER</div>
+  <div class="sec-sub">25 min focus → 5 min break. Repeat 4x. Then take a long break. Simple.</div>
+
+  <div class="two-col">
+    <div class="card card-accent-coral">
+      <div class="card-title"><span>🍅</span> Focus Timer</div>
+      <div class="pomo-wrap">
+        <div class="pomo-ring">
+          <svg width="160" height="160" viewBox="0 0 160 160">
+            <circle cx="80" cy="80" r="77" id="pomoCircle"/>
+          </svg>
+          <div class="pomo-time" id="pomoDisplay">25:00</div>
+          <div class="pomo-label" id="pomoLabel">FOCUS</div>
+        </div>
+        <div class="pomo-dots">
+          <div class="pdot" id="pd0"></div><div class="pdot" id="pd1"></div>
+          <div class="pdot" id="pd2"></div><div class="pdot" id="pd3"></div>
+        </div>
+        <div class="pomo-session" id="pomoSess">Session 1 of 4</div>
+        <div class="pomo-btns" style="margin-top:14px;">
+          <button class="pomo-btn start" id="pomoStartBtn" onclick="togglePomo()">▶ START</button>
+          <button class="pomo-btn" onclick="resetPomo()">↺ RESET</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="card" style="background:rgba(255,107,107,0.05);border-color:rgba(255,107,107,0.15);">
+        <div class="card-title"><span>📋</span> Working on</div>
+        <textarea id="pomoTask" rows="3" placeholder="What are you focusing on this session? Write it here — it helps your brain commit..."></textarea>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>🧠</span> The Pomodoro Method</div>
+        <div style="font-size:13px;color:var(--muted2);line-height:1.8;font-weight:300;">
+          <div style="display:flex;gap:8px;margin-bottom:6px;"><span style="color:var(--coral);font-weight:700;">25 min</span><span>Focus — phone off, one task only</span></div>
+          <div style="display:flex;gap:8px;margin-bottom:6px;"><span style="color:var(--lime);font-weight:700;">5 min</span><span>Short break — stand up, breathe, hydrate</span></div>
+          <div style="display:flex;gap:8px;margin-bottom:6px;"><span style="color:var(--gold);font-weight:700;">× 4</span><span>Complete 4 rounds</span></div>
+          <div style="display:flex;gap:8px;"><span style="color:var(--violet);font-weight:700;">15 min</span><span>Long break — go for a walk</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── PAGE 4: HABITS ───── -->
+<div class="page" id="page4">
+  <div class="sec-head">DAILY HABITS</div>
+  <div class="sec-sub">Small consistent actions. These matter more than big effort once a month.</div>
+
+  <div class="card card-accent-lime">
+    <div class="card-title"><span>✅</span> Today's Habits — tap to check off</div>
+    <div id="habitList">
+      <div class="habit-item" onclick="toggleHabit(this)">
+        <div class="habit-circle"></div>
+        <span class="habit-name">🏃 Move / Exercise (any amount)</span>
+        <span class="habit-streak">🔥 4d</span>
+      </div>
+      <div class="habit-item" onclick="toggleHabit(this)">
+        <div class="habit-circle"></div>
+        <span class="habit-name">🧘 Meditate or breathe (5 min)</span>
+        <span class="habit-streak">🔥 2d</span>
+      </div>
+      <div class="habit-item" onclick="toggleHabit(this)">
+        <div class="habit-circle"></div>
+        <span class="habit-name">📵 No phone first hour of morning</span>
+        <span class="habit-streak">🔥 1d</span>
+      </div>
+      <div class="habit-item" onclick="toggleHabit(this)">
+        <div class="habit-circle"></div>
+        <span class="habit-name">📖 Read 20 minutes</span>
+        <span class="habit-streak">🔥 7d</span>
+      </div>
+      <div class="habit-item" onclick="toggleHabit(this)">
+        <div class="habit-circle"></div>
+        <span class="habit-name">😴 In bed by 11 PM</span>
+        <span class="habit-streak">🔥 3d</span>
+      </div>
+      <div class="habit-item" onclick="toggleHabit(this)">
+        <div class="habit-circle"></div>
+        <span class="habit-name">🥗 Eat at least 2 proper meals</span>
+        <span class="habit-streak">🔥 5d</span>
+      </div>
+      <div class="habit-item" onclick="toggleHabit(this)">
+        <div class="habit-circle"></div>
+        <span class="habit-name">📝 Completed my Top 3 tasks</span>
+        <span class="habit-streak">🔥 2d</span>
+      </div>
+      <div class="habit-item" onclick="toggleHabit(this)">
+        <div class="habit-circle"></div>
+        <span class="habit-name">🤝 Did something kind for myself</span>
+        <span class="habit-streak">🔥 9d</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-grid" id="habitStats">
+    <div class="stat-card">
+      <div class="stat-val" id="statDone" style="color:var(--lime);">0</div>
+      <div class="stat-lbl">Done Today</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="statTotal" style="color:var(--muted);">8</div>
+      <div class="stat-lbl">Total Habits</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--gold);">🔥</div>
+      <div class="stat-lbl">Keep Streak Going</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── PAGE 5: BODY ───── -->
+<div class="page" id="page5">
+  <div class="sec-head">BODY CHECK-IN</div>
+  <div class="sec-sub">ADHD meds + hydration directly affect your focus. Don't skip this.</div>
+
+  <div class="card card-accent-gold" style="margin-bottom:16px;">
+    <div class="card-title"><span>💊</span> Medication</div>
+    <div class="meds-btn" id="medsBtn" onclick="toggleMeds()">
+      <span class="meds-icon">💊</span>
+      <div class="meds-text">
+        <div class="meds-title">ADHD Medication</div>
+        <div class="meds-sub" id="medsTime">Not logged yet today</div>
+      </div>
+      <span class="meds-status" id="medsStatus">Tap to log ›</span>
+    </div>
+  </div>
+
+  <div class="card card-accent-cyan">
+    <div class="card-title"><span>💧</span> Water Intake — aim for 8 glasses</div>
+    <div class="water-row" id="waterRow">
+      <span class="wdrop" onclick="fillWater(0)">💧</span>
+      <span class="wdrop" onclick="fillWater(1)">💧</span>
+      <span class="wdrop" onclick="fillWater(2)">💧</span>
+      <span class="wdrop" onclick="fillWater(3)">💧</span>
+      <span class="wdrop" onclick="fillWater(4)">💧</span>
+      <span class="wdrop" onclick="fillWater(5)">💧</span>
+      <span class="wdrop" onclick="fillWater(6)">💧</span>
+      <span class="wdrop" onclick="fillWater(7)">💧</span>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-top:10px;" id="waterMsg">0 / 8 glasses — hydration affects focus more than you think</div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><span>🍽</span> Meals</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="check-item" onclick="toggleCheck(this)" id="meal1"><div class="check-box"></div><div class="check-content"><div class="check-label">Breakfast</div></div></div>
+        <div class="check-item" onclick="toggleCheck(this)" id="meal2"><div class="check-box"></div><div class="check-content"><div class="check-label">Lunch</div></div></div>
+        <div class="check-item" onclick="toggleCheck(this)" id="meal3"><div class="check-box"></div><div class="check-content"><div class="check-label">Dinner</div></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>😴</span> Sleep Last Night</div>
+      <div style="margin-top:4px;">
+        <input type="range" min="1" max="10" value="7" id="sleepSlider" oninput="updateSleep(this)">
+        <div class="slider-labels"><span>😴 Poor</span><span id="sleepVal" style="color:var(--violet);font-weight:700;">7 hrs</span><span>✨ Great</span></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:10px;font-weight:300;">Sleep quality = ADHD symptom severity next day</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───── PAGE 6: REFLECT ───── -->
+<div class="page" id="page6">
+  <div class="sec-head">END OF DAY</div>
+  <div class="sec-sub">5 minutes. Close the loop. Sleep better tonight.</div>
+
+  <div class="card card-accent-violet">
+    <div class="card-title"><span>🌙</span> Evening Reflection</div>
+    <div class="prompt-list">
+      <div class="prompt-item">
+        <div class="prompt-q">What went well today? (even one small thing counts)</div>
+        <textarea class="prompt-inp" rows="3" placeholder="I managed to..."></textarea>
+      </div>
+      <div class="prompt-item">
+        <div class="prompt-q">What was hard? What got in the way?</div>
+        <textarea class="prompt-inp" rows="3" placeholder="I struggled with..."></textarea>
+      </div>
+      <div class="prompt-item">
+        <div class="prompt-q">What would I do differently tomorrow?</div>
+        <textarea class="prompt-inp" rows="3" placeholder="Tomorrow I'll try..."></textarea>
+      </div>
+      <div class="prompt-item">
+        <div class="prompt-q">One thing I'm proud of today</div>
+        <textarea class="prompt-inp" rows="2" placeholder="Today I'm proud that..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="background:rgba(200,241,53,0.04);border-color:rgba(200,241,53,0.15);">
+    <div class="card-title"><span>📅</span> Tomorrow's Setup (do tonight — not tomorrow morning)</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-content"><div class="check-label">Write tomorrow's Top 3 tasks now</div><div class="check-sub">Morning ADHD brain will thank you</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-content"><div class="check-label">Set out anything you need tomorrow</div><div class="check-sub">Bag, meds, gym kit — reduce decision fatigue</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-content"><div class="check-label">Phone charging outside bedroom</div><div class="check-sub">Or at minimum, on Do Not Disturb</div></div></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-content"><div class="check-label">Wind-down routine started (no screens)</div><div class="check-sub">ADHD brains need longer to wind down</div></div></div>
+    </div>
+  </div>
+
+  <!-- Day summary -->
+  <div class="card" style="text-align:center;">
+    <div class="card-title" style="justify-content:center;"><span>📊</span> Today's Summary</div>
+    <div class="stats-grid" style="margin-bottom:0;">
+      <div class="stat-card"><div class="stat-val" id="sumHabits" style="color:var(--lime);">0</div><div class="stat-lbl">Habits Done</div></div>
+      <div class="stat-card"><div class="stat-val" id="sumTasks" style="color:var(--violet);">0</div><div class="stat-lbl">Tasks Filled</div></div>
+      <div class="stat-card"><div class="stat-val" id="sumWater" style="color:var(--cyan);">0</div><div class="stat-lbl">Glasses Water</div></div>
+      <div class="stat-card"><div class="stat-val" id="sumPomo" style="color:var(--coral);">0</div><div class="stat-lbl">Pomodoros</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SAVE BUTTON -->
+<button class="save-btn" onclick="saveAll()">💾 Save Progress</button>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Progress saved!</div>
+
+<script>
+// ── DATE ──
+const now = new Date();
+document.getElementById('headerDate').textContent =
+  now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+
+// ── TAB NAVIGATION ──
+function goTab(i){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page'+i).classList.add('active');
+  document.getElementById('tab'+i).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── MOOD ──
+let mood = '';
+function setMood(el, m){
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active'); mood = m; save();
+}
+
+// ── ENERGY ──
+function updateEnergy(el){
+  document.getElementById('energyVal').textContent = el.value+'/5';
+  save();
+}
+
+// ── FOCUS TAGS ──
+function toggleTag(el){ el.classList.toggle('active'); save(); }
+
+// ── TOP 3 TASKS ──
+function calcProgress(){
+  const t1=document.getElementById('task1').value.trim();
+  const t2=document.getElementById('task2').value.trim();
+  const t3=document.getElementById('task3').value.trim();
+  const habDone = document.querySelectorAll('.habit-item.done').length;
+  const meds = document.getElementById('medsBtn').classList.contains('done')?1:0;
+  const water = document.querySelectorAll('.wdrop.on').length;
+  const tasks = [t1,t2,t3].filter(Boolean).length;
+  const total = 3 + 8 + 1 + 4;
+  const done = tasks + habDone + meds + Math.min(water,4);
+  const pct = Math.round((done/total)*100);
+  document.getElementById('hprogFill').style.width = pct+'%';
+  document.getElementById('hprogPct').textContent = pct+'%';
+  // update summary
+  document.getElementById('sumTasks').textContent = tasks;
+  document.getElementById('sumHabits').textContent = habDone;
+  document.getElementById('sumWater').textContent = water;
+}
+
+// ── EXTRA TASKS ──
+let extras = [];
+function addExtra(){
+  const inp = document.getElementById('extraInp');
+  if(!inp.value.trim()) return;
+  extras.push({text:inp.value.trim(),done:false});
+  inp.value='';
+  renderExtras();
+  save();
+}
+function renderExtras(){
+  const el = document.getElementById('extraList');
+  el.innerHTML = extras.map((e,i)=>`
+    <div class="check-item ${e.done?'done':''}" onclick="toggleExtra(${i})" style="margin-bottom:8px;">
+      <div class="check-box">${e.done?'✓':''}</div>
+      <div class="check-content"><div class="check-label">${e.text}</div></div>
+      <span onclick="event.stopPropagation();removeExtra(${i})" style="color:var(--muted);cursor:pointer;font-size:16px;padding:0 4px;">×</span>
+    </div>`).join('');
+}
+function toggleExtra(i){ extras[i].done=!extras[i].done; renderExtras(); save(); }
+function removeExtra(i){ extras.splice(i,1); renderExtras(); save(); }
+
+// ── HABITS ──
+function toggleHabit(el){
+  el.classList.toggle('done');
+  const c = el.querySelector('.habit-circle');
+  c.textContent = el.classList.contains('done')?'✓':'';
+  const done = document.querySelectorAll('.habit-item.done').length;
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('sumHabits').textContent = done;
+  calcProgress(); save();
+}
+
+// ── GENERIC CHECK TOGGLE ──
+function toggleCheck(el){
+  el.classList.toggle('done');
+  const b = el.querySelector('.check-box');
+  b.textContent = el.classList.contains('done')?'✓':'';
+  calcProgress(); save();
+}
+
+// ── WATER ──
+let waterCount = 0;
+function fillWater(idx){
+  const drops = document.querySelectorAll('.wdrop');
+  waterCount = idx+1;
+  drops.forEach((d,i)=>{ i<=idx?d.classList.add('on'):d.classList.remove('on'); });
+  const msgs = ['','1 glass — good start!','2 glasses — keep going!','3 glasses — almost halfway!','4 glasses — halfway there!','5 glasses — nice!','6 glasses — great!','7 glasses — almost there!','8 glasses — fully hydrated! 🎉'];
+  document.getElementById('waterMsg').textContent = (waterCount)+' / 8 glasses — '+(msgs[waterCount]||'');
+  document.getElementById('sumWater').textContent = waterCount;
+  calcProgress(); save();
+}
+
+// ── MEDS ──
+function toggleMeds(){
+  const btn = document.getElementById('medsBtn');
+  btn.classList.toggle('done');
+  const done = btn.classList.contains('done');
+  document.getElementById('medsStatus').textContent = done?'✓ Logged':'Tap to log ›';
+  const t = new Date();
+  document.getElementById('medsTime').textContent = done?`Logged at ${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}`:'Not logged yet today';
+  calcProgress(); save();
+}
+
+// ── SLEEP ──
+function updateSleep(el){
+  document.getElementById('sleepVal').textContent = el.value+' hrs';
+  save();
+}
+
+// ── POMODORO ──
+let pomoRunning=false, pomoSecs=25*60, pomoInterval, pomoCount=0, pomoBreak=false, pomoDone=0;
+const CIRC = 2*Math.PI*77;
+
+function renderPomo(){
+  const m=String(Math.floor(pomoSecs/60)).padStart(2,'0');
+  const s=String(pomoSecs%60).padStart(2,'0');
+  document.getElementById('pomoDisplay').textContent=m+':'+s;
+  const total = pomoBreak?(pomoCount===4?15*60:5*60):25*60;
+  const offset = CIRC - (CIRC*(total-pomoSecs)/total);
+  document.getElementById('pomoCircle').style.strokeDashoffset = offset;
+  document.getElementById('pomoCircle').style.stroke = pomoBreak?'var(--lime)':'var(--coral)';
+  document.getElementById('pomoLabel').textContent = pomoBreak?'BREAK':'FOCUS';
+  document.getElementById('pomoSess').textContent = `Session ${Math.min(pomoCount+1,4)} of 4`;
+}
+
+function togglePomo(){
+  const btn = document.getElementById('pomoStartBtn');
+  if(!pomoRunning){
+    pomoRunning=true; btn.classList.add('running'); btn.textContent='⏸ PAUSE';
+    pomoInterval=setInterval(()=>{
+      pomoSecs--;
+      if(pomoSecs<0){
+        if(!pomoBreak){
+          pomoDone++; document.getElementById('sumPomo').textContent=pomoDone;
+          if(pomoCount<4){ document.getElementById('pd'+pomoCount).classList.add('done'); pomoCount++; }
+          pomoBreak=true; pomoSecs=pomoCount===4?15*60:5*60;
+          showToast('🎉 Pomodoro done! Take a break.');
+        } else {
+          pomoBreak=false; pomoSecs=25*60;
+          showToast('⚡ Break over! Time to focus.');
+        }
+      }
+      renderPomo();
+    },1000);
+  } else {
+    pomoRunning=false; btn.classList.remove('running'); btn.textContent='▶ START';
+    clearInterval(pomoInterval);
+  }
+}
+
+function resetPomo(){
+  clearInterval(pomoInterval); pomoRunning=false;
+  pomoSecs=25*60; pomoCount=0; pomoBreak=false;
+  document.getElementById('pomoStartBtn').classList.remove('running');
+  document.getElementById('pomoStartBtn').textContent='▶ START';
+  for(let i=0;i<4;i++) document.getElementById('pd'+i).classList.remove('done');
+  renderPomo();
+}
+
+renderPomo();
+
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ── SAVE / LOAD ──
+function save(){
+  const data={
+    brainDump:document.getElementById('brainDump').value,
+    winInput:document.getElementById('winInput').value,
+    task1:document.getElementById('task1').value,
+    task2:document.getElementById('task2').value,
+    task3:document.getElementById('task3').value,
+    reward:document.getElementById('rewardTxt').value,
+    energy:document.getElementById('energySlider').value,
+    sleep:document.getElementById('sleepSlider').value,
+    mood,extras,waterCount,
+    medsDown:document.getElementById('medsBtn').classList.contains('done'),
+    habits:Array.from(document.querySelectorAll('.habit-item')).map(h=>h.classList.contains('done')),
+    focusTags:Array.from(document.querySelectorAll('.ftag')).map(t=>t.classList.contains('active')),
+  };
+  try{localStorage.setItem('adhd_planner_'+now.toDateString(),JSON.stringify(data));}catch(e){}
+}
+
+function saveAll(){
+  save();
+  showToast('✓ Progress saved for today!');
+}
+
+function load(){
+  try{
+    const raw=localStorage.getItem('adhd_planner_'+now.toDateString());
+    if(!raw) return;
+    const d=JSON.parse(raw);
+    if(d.brainDump) document.getElementById('brainDump').value=d.brainDump;
+    if(d.winInput)  document.getElementById('winInput').value=d.winInput;
+    if(d.task1)     document.getElementById('task1').value=d.task1;
+    if(d.task2)     document.getElementById('task2').value=d.task2;
+    if(d.task3)     document.getElementById('task3').value=d.task3;
+    if(d.reward)    document.getElementById('rewardTxt').value=d.reward;
+    if(d.energy){   document.getElementById('energySlider').value=d.energy; document.getElementById('energyVal').textContent=d.energy+'/5'; }
+    if(d.sleep){    document.getElementById('sleepSlider').value=d.sleep; document.getElementById('sleepVal').textContent=d.sleep+' hrs'; }
+    if(d.mood){ mood=d.mood; document.querySelectorAll('.mood-btn').forEach(b=>{ if(b.dataset.mood===d.mood) b.classList.add('active'); }); }
+    if(d.extras){ extras=d.extras; renderExtras(); }
+    if(d.waterCount){ for(let i=0;i<d.waterCount;i++) fillWater(i); }
+    if(d.medsDown){ document.getElementById('medsBtn').classList.add('done'); document.getElementById('medsStatus').textContent='✓ Logged'; }
+    if(d.habits) d.habits.forEach((on,i)=>{ const el=document.querySelectorAll('.habit-item')[i]; if(el&&on){ el.classList.add('done'); el.querySelector('.habit-circle').textContent='✓'; } });
+    if(d.focusTags) d.focusTags.forEach((on,i)=>{ const el=document.querySelectorAll('.ftag')[i]; if(el&&on) el.classList.add('active'); });
+    calcProgress();
+    const done=document.querySelectorAll('.habit-item.done').length;
+    document.getElementById('statDone').textContent=done;
+  }catch(e){}
+}
+
+load();
+calcProgress();
+
+// Auto-save every 30s
+setInterval(save, 30000);
+</script>
+</body>
+</html>
