@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Support This Project — ADHD Daily Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#09090d;--bg2:#111118;--bg3:#18181f;--bg4:#1f1f28;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --text:#eeeef5;--muted:#6b6b8a;--muted2:#9090b0;
+  --lime:#c9f135;--violet:#8b5cf6;--coral:#ff6b6b;--gold:#fbbf24;--cyan:#22d3ee;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:0.025;pointer-events:none;z-index:9999;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(9,9,13,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:8px;}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 8px var(--lime);}
+.nav-back{font-size:12px;color:var(--muted);text-decoration:none;font-weight:500;transition:color 0.2s;}
+.nav-back:hover{color:var(--lime);}
+
+/* HERO */
+.hero{
+  min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 24px 60px;position:relative;overflow:hidden;
+}
+.blob{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
+.b1{width:500px;height:500px;background:rgba(251,191,36,0.08);top:-100px;right:-100px;}
+.b2{width:400px;height:400px;background:rgba(139,92,246,0.08);bottom:-60px;left:-80px;}
+.b3{width:250px;height:250px;background:rgba(201,241,53,0.06);top:50%;left:50%;transform:translate(-50%,-50%);}
+
+.hero-content{position:relative;z-index:1;max-width:680px;}
+
+.heart-emoji{
+  font-size:64px;margin-bottom:20px;display:block;
+  animation:heartbeat 2s ease-in-out infinite;
+}
+@keyframes heartbeat{0%,100%{transform:scale(1);}14%{transform:scale(1.15);}28%{transform:scale(1);}42%{transform:scale(1.1);}70%{transform:scale(1);}}
+
+.hero-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(48px,9vw,100px);
+  line-height:0.88;letter-spacing:2px;color:var(--text);
+  margin-bottom:20px;
+}
+.hero-title .acc{color:var(--gold);}
+
+.hero-sub{
+  font-size:clamp(15px,2.5vw,18px);color:var(--muted2);
+  font-weight:300;line-height:1.75;margin-bottom:12px;
+}
+.hero-sub strong{color:var(--text);font-weight:600;}
+
+.hero-note{
+  font-size:13px;color:var(--muted);font-style:italic;margin-bottom:40px;
+}
+
+/* STORY SECTION */
+.story{
+  padding:64px 24px;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:var(--bg2);
+}
+.story-inner{max-width:680px;margin:0 auto;}
+.story-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.story-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,5vw,48px);letter-spacing:1px;color:var(--text);margin-bottom:24px;line-height:1;}
+.story-body{font-size:15px;color:var(--muted2);font-weight:300;line-height:1.85;}
+.story-body p{margin-bottom:16px;}
+.story-body strong{color:var(--text);font-weight:600;}
+.story-body em{color:var(--gold);font-style:normal;font-weight:600;}
+
+/* IMPACT */
+.impact{padding:64px 24px;}
+.impact-inner{max-width:840px;margin:0 auto;}
+.impact-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:14px;text-align:center;}
+.impact-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,5vw,52px);letter-spacing:1px;color:var(--text);margin-bottom:40px;line-height:1;text-align:center;}
+.impact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+.impact-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:18px;
+  padding:24px;text-align:center;transition:all 0.3s;
+}
+.impact-card:hover{border-color:var(--border2);transform:translateY(-3px);}
+.impact-icon{font-size:32px;margin-bottom:12px;}
+.impact-val{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;line-height:1;margin-bottom:4px;}
+.impact-lbl{font-size:12px;color:var(--muted);font-weight:500;}
+
+/* TIERS */
+.tiers{padding:64px 24px;background:var(--bg2);border-top:1px solid var(--border);}
+.tiers-inner{max-width:900px;margin:0 auto;}
+.tiers-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--violet);margin-bottom:14px;text-align:center;}
+.tiers-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,5vw,52px);letter-spacing:1px;color:var(--text);margin-bottom:8px;line-height:1;text-align:center;}
+.tiers-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:40px;font-weight:300;}
+.tier-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;}
+.tier-card{
+  background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:20px;padding:28px;
+  transition:all 0.3s;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.tier-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 0% 0%,var(--glow,transparent) 0%,transparent 60%);opacity:0;transition:opacity 0.3s;}
+.tier-card:hover{transform:translateY(-4px);}
+.tier-card:hover::before{opacity:1;}
+.tier-card.popular{border-color:var(--gold);}
+.tier-popular-badge{position:absolute;top:-1px;right:20px;background:var(--gold);color:#09090d;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:4px 12px;border-radius:0 0 8px 8px;}
+.tier-emoji{font-size:36px;margin-bottom:16px;}
+.tier-name{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.tier-price{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:0px;line-height:1;margin-bottom:4px;}
+.tier-period{font-size:12px;color:var(--muted);margin-bottom:16px;}
+.tier-divider{height:1px;background:var(--border);margin:12px 0 16px;}
+.tier-perks{list-style:none;display:flex;flex-direction:column;gap:8px;flex:1;margin-bottom:20px;}
+.tier-perks li{font-size:13px;color:var(--muted2);display:flex;align-items:flex-start;gap:8px;font-weight:300;line-height:1.5;}
+.tier-perks li::before{content:'✦';font-size:9px;color:var(--gold);flex-shrink:0;margin-top:4px;}
+.tier-btn{
+  width:100%;padding:13px;border-radius:12px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;transition:all 0.2s;text-align:center;
+  text-decoration:none;display:block;border:none;
+  letter-spacing:0.3px;
+}
+.tier-btn-gold{background:var(--gold);color:#09090d;}
+.tier-btn-gold:hover{opacity:0.9;transform:translateY(-1px);}
+.tier-btn-outline{background:transparent;border:1.5px solid var(--border2);color:var(--text);}
+.tier-btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.tier-btn-violet{background:var(--violet);color:#fff;}
+.tier-btn-violet:hover{opacity:0.9;}
+
+/* PAYMENT METHODS */
+.methods{padding:48px 24px;border-top:1px solid var(--border);}
+.methods-inner{max-width:680px;margin:0 auto;text-align:center;}
+.methods-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin-bottom:14px;}
+.methods-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;color:var(--text);margin-bottom:8px;}
+.methods-sub{font-size:13px;color:var(--muted);margin-bottom:32px;font-weight:300;}
+.methods-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
+.method-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px 16px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  transition:all 0.2s;cursor:pointer;text-decoration:none;
+}
+.method-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.method-icon{font-size:28px;}
+.method-name{font-size:12px;font-weight:700;color:var(--text);}
+.method-desc{font-size:10px;color:var(--muted);text-align:center;line-height:1.4;}
+.method-url{font-size:10px;color:var(--cyan);margin-top:2px;word-break:break-all;}
+
+/* ONE TIME SECTION */
+.onetime{padding:48px 24px;background:var(--bg2);border-top:1px solid var(--border);}
+.onetime-inner{max-width:680px;margin:0 auto;text-align:center;}
+.amount-grid{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:24px 0;}
+.amount-btn{
+  background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:999px;padding:10px 24px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;
+  color:var(--text);cursor:pointer;transition:all 0.2s;
+}
+.amount-btn:hover,.amount-btn.active{border-color:var(--lime);color:var(--lime);background:rgba(201,241,53,0.08);}
+.custom-amount{
+  background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:12px;padding:12px 16px;
+  display:flex;align-items:center;gap:8px;margin:0 auto 24px;
+  max-width:280px;
+}
+.custom-symbol{font-size:16px;color:var(--muted);font-weight:700;}
+.custom-inp{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:18px;font-weight:700;
+}
+.custom-inp::placeholder{color:var(--muted);}
+.donate-btn{
+  background:var(--lime);color:#09090d;border:none;
+  border-radius:999px;padding:15px 40px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;font-weight:800;cursor:pointer;
+  box-shadow:0 0 30px rgba(201,241,53,0.25);
+  transition:all 0.25s;display:inline-flex;align-items:center;gap:8px;
+  text-decoration:none;
+}
+.donate-btn:hover{transform:translateY(-2px);box-shadow:0 6px 40px rgba(201,241,53,0.4);}
+
+/* THANK YOU WALL */
+.thanks-section{padding:48px 24px;border-top:1px solid var(--border);}
+.thanks-inner{max-width:840px;margin:0 auto;}
+.thanks-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--coral);margin-bottom:14px;text-align:center;}
+.thanks-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,4vw,44px);letter-spacing:1px;color:var(--text);margin-bottom:8px;text-align:center;}
+.thanks-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:32px;font-weight:300;}
+.thanks-wall{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+.thanks-chip{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:999px;padding:8px 16px;
+  font-size:13px;font-weight:500;color:var(--muted2);
+  display:flex;align-items:center;gap:6px;
+}
+.thanks-chip .t-emoji{font-size:14px;}
+
+/* FAQ */
+.support-faq{padding:48px 24px;background:var(--bg2);border-top:1px solid var(--border);}
+.sfaq-inner{max-width:680px;margin:0 auto;}
+.sfaq-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;color:var(--text);margin-bottom:24px;}
+.sfaq-item{background:var(--bg3);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden;}
+.sfaq-q{padding:16px 20px;font-size:14px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s;user-select:none;}
+.sfaq-q:hover{background:var(--bg4);}
+.sfaq-icon{color:var(--muted);transition:transform 0.3s;font-size:16px;}
+.sfaq-item.open .sfaq-icon{transform:rotate(45deg);color:var(--gold);}
+.sfaq-a{max-height:0;overflow:hidden;font-size:13px;color:var(--muted2);line-height:1.75;font-weight:300;transition:max-height 0.3s ease,padding 0.2s;padding:0 20px;}
+.sfaq-item.open .sfaq-a{max-height:200px;padding:0 20px 16px;}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:32px 24px;text-align:center;font-size:12px;color:var(--muted);}
+footer a{color:var(--lime);text-decoration:none;}
+
+/* RESPONSIVE */
+@media(max-width:480px){
+  nav{padding:0 16px;}
+  .hero{padding:60px 16px 48px;min-height:auto;}
+  .tier-card.popular{transform:none;}
+  .amount-grid{gap:8px;}
+  .amount-btn{padding:9px 18px;font-size:13px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><div class="nav-dot"></div>ADHD PLANNER</a>
+  <a href="index.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="hero-content">
+    <span class="heart-emoji">💛</span>
+    <h1 class="hero-title">KEEP THIS<br>FREE FOR<br><span class="acc">EVERYONE</span></h1>
+    <p class="hero-sub">
+      This planner is free because <strong>ADHD doesn't care about your bank balance.</strong><br>
+      If it's helped you — even just one good day — consider helping us keep it running.
+    </p>
+    <p class="hero-note">No pressure. No guilt. Only if you want to and can afford to. 💜</p>
+    <a href="#support-options" class="donate-btn">💛 Support This Project</a>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story">
+  <div class="story-inner">
+    <div class="story-label">Why This Exists</div>
+    <h2 class="story-title">THE STORY<br>BEHIND THIS</h2>
+    <div class="story-body">
+      <p>This planner was built out of <strong>personal frustration.</strong> Every planner, app, and system out there was designed for neurotypical brains — neat little boxes, rigid schedules, no room for the chaos of an ADHD morning.</p>
+      <p>So we built something different. A tool that starts with a brain dump instead of a to-do list. That uses Pomodoro timers because ADHD brains need hard stops. That includes a medication log because forgetting is part of the condition, not a character flaw.</p>
+      <p><em>And we made it free</em> — because the people who need it most often can't afford yet another subscription.</p>
+      <p>Running this costs real money: hosting, domain, maintenance, future development. Your support — however small — directly funds the time and infrastructure that keeps this free for thousands of people.</p>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section class="impact">
+  <div class="impact-inner">
+    <div class="impact-label">Your Impact</div>
+    <h2 class="impact-title">WHAT YOUR<br>SUPPORT FUNDS</h2>
+    <div class="impact-grid">
+      <div class="impact-card">
+        <div class="impact-icon">☁️</div>
+        <div class="impact-val" style="color:var(--cyan);">$0</div>
+        <div class="impact-lbl">Cost to users — forever</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-icon">🔧</div>
+        <div class="impact-val" style="color:var(--lime);">New</div>
+        <div class="impact-lbl">Features in development</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-icon">🌍</div>
+        <div class="impact-val" style="color:var(--violet);">Free</div>
+        <div class="impact-lbl">Always accessible globally</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-icon">🧠</div>
+        <div class="impact-val" style="color:var(--gold);">100%</div>
+        <div class="impact-lbl">ADHD-brain focused</div>
+      </div>
+    </div>
+    <div style="margin-top:24px;text-align:center;font-size:13px;color:var(--muted);font-weight:300;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.8;">
+      Every contribution goes directly towards: server costs, domain renewal, new feature development, and keeping the tool ad-free and tracking-free.
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORT TIERS -->
+<section class="tiers" id="support-options">
+  <div class="tiers-inner">
+    <div class="tiers-label">Choose Your Support</div>
+    <h2 class="tiers-title">PICK YOUR<br>LEVEL</h2>
+    <p class="tiers-sub">Every amount matters. Even a coffee. Especially a coffee.</p>
+    <div class="tier-grid">
+
+      <div class="tier-card" style="--glow:rgba(201,241,53,0.08);">
+        <div class="tier-emoji">☕</div>
+        <div class="tier-name">Coffee Supporter</div>
+        <div class="tier-price" style="color:var(--lime);">$3</div>
+        <div class="tier-period">one-time</div>
+        <div class="tier-divider"></div>
+        <ul class="tier-perks">
+          <li>Buys us a coffee ☕</li>
+          <li>Keeps the lights on for a day</li>
+          <li>Our genuine gratitude</li>
+          <li>Warm fuzzy feeling (yours)</li>
+        </ul>
+        <a href="#payment-methods" class="tier-btn tier-btn-outline">Support with $3</a>
+      </div>
+
+      <div class="tier-card popular" style="--glow:rgba(251,191,36,0.1);">
+        <div class="tier-popular-badge">⭐ Most Popular</div>
+        <div class="tier-emoji">🌟</div>
+        <div class="tier-name">Big Supporter</div>
+        <div class="tier-price" style="color:var(--gold);">$10</div>
+        <div class="tier-period">one-time</div>
+        <div class="tier-divider"></div>
+        <ul class="tier-perks">
+          <li>Covers a month of hosting</li>
+          <li>Directly funds next feature</li>
+          <li>Shoutout in our thank you wall</li>
+          <li>Access to future premium features (if any)</li>
+        </ul>
+        <a href="#payment-methods" class="tier-btn tier-btn-gold">Support with $10</a>
+      </div>
+
+      <div class="tier-card" style="--glow:rgba(139,92,246,0.1);">
+        <div class="tier-emoji">🚀</div>
+        <div class="tier-name">Champion</div>
+        <div class="tier-price" style="color:var(--violet);">$25</div>
+        <div class="tier-period">one-time</div>
+        <div class="tier-divider"></div>
+        <ul class="tier-perks">
+          <li>Funds 3 months of infrastructure</li>
+          <li>Feature request consideration</li>
+          <li>Named in thank you wall permanently</li>
+          <li>Priority email support forever</li>
+        </ul>
+        <a href="#payment-methods" class="tier-btn tier-btn-violet">Support with $25</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ONE-TIME CUSTOM -->
+<section class="onetime">
+  <div class="onetime-inner">
+    <div class="methods-label">Custom Amount</div>
+    <h2 class="methods-title" style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;margin-bottom:8px;">GIVE WHAT<br>FEELS RIGHT</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:28px;font-weight:300;">$1 or $100 — it all counts. No judgement either way.</p>
+    <div class="amount-grid">
+      <button class="amount-btn" onclick="setAmount('1')">$1</button>
+      <button class="amount-btn active" onclick="setAmount('5')">$5</button>
+      <button class="amount-btn" onclick="setAmount('10')">$10</button>
+      <button class="amount-btn" onclick="setAmount('20')">$20</button>
+      <button class="amount-btn" onclick="setAmount('50')">$50</button>
+    </div>
+    <div class="custom-amount">
+      <span class="custom-symbol">$</span>
+      <input class="custom-inp" id="customAmt" type="number" placeholder="Other amount" min="1">
+    </div>
+    <a href="#payment-methods" class="donate-btn" id="donateBtn">💛 Donate $5</a>
+  </div>
+</section>
+
+<!-- PAYMENT METHODS -->
+<section class="methods" id="payment-methods">
+  <div class="methods-inner">
+    <div class="methods-label">How to Pay</div>
+    <h2 class="methods-title">PAYMENT<br>OPTIONS</h2>
+    <p class="methods-sub">Choose whatever works for you — replace the links below with your real payment accounts.</p>
+    <div class="methods-grid">
+
+      <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank" class="method-card">
+        <div class="method-icon">☕</div>
+        <div class="method-name">Buy Me a Coffee</div>
+        <div class="method-desc">Simplest option — one-click support</div>
+        <div class="method-url">buymeacoffee.com/yourname</div>
+      </a>
+
+      <a href="https://patreon.com/YOUR_USERNAME" target="_blank" class="method-card">
+        <div class="method-icon">🎁</div>
+        <div class="method-name">Patreon</div>
+        <div class="method-desc">Monthly support + perks</div>
+        <div class="method-url">patreon.com/yourname</div>
+      </a>
+
+      <div class="method-card" onclick="copyAddress()">
+        <div class="method-icon">₿</div>
+        <div class="method-name">Crypto</div>
+        <div class="method-desc">BTC/ETH accepted — tap to copy address</div>
+        <div class="method-url" id="cryptoAddr">YOUR_WALLET_ADDRESS</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- THANK YOU WALL -->
+<section class="thanks-section">
+  <div class="thanks-inner">
+    <div class="thanks-label">Supporters</div>
+    <h2 class="thanks-title">THANK YOU<br>WALL 💛</h2>
+    <p class="thanks-sub">Everyone who has supported this project. You're keeping it free for others.</p>
+    <div class="thanks-wall" id="thanksWall">
+      <div class="thanks-chip"><span class="t-emoji">☕</span> Sarah M. — Coffee Supporter</div>
+      <div class="thanks-chip"><span class="t-emoji">🌟</span> James K. — Big Supporter</div>
+      <div class="thanks-chip"><span class="t-emoji">🚀</span> Priya T. — Champion</div>
+      <div class="thanks-chip"><span class="t-emoji">☕</span> Anonymous — Coffee Supporter</div>
+      <div class="thanks-chip"><span class="t-emoji">🌟</span> Marcus W. — Big Supporter</div>
+      <div class="thanks-chip"><span class="t-emoji">☕</span> Leila A. — Coffee Supporter</div>
+      <div class="thanks-chip"><span class="t-emoji">🚀</span> Tom B. — Champion</div>
+      <div class="thanks-chip"><span class="t-emoji">☕</span> Yuki S. — Coffee Supporter</div>
+      <div class="thanks-chip" style="border-color:rgba(201,241,53,0.3);color:var(--lime);">+ Be the next supporter ✦</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="support-faq">
+  <div class="sfaq-inner">
+    <h2 class="sfaq-title">QUESTIONS</h2>
+    <div class="sfaq-item" onclick="this.classList.toggle('open')">
+      <div class="sfaq-q">Is my donation tax deductible? <span class="sfaq-icon">+</span></div>
+      <div class="sfaq-a">No — this is a personal project, not a registered charity. Donations are voluntary contributions to support an independent creator, not tax-deductible donations.</div>
+    </div>
+    <div class="sfaq-item" onclick="this.classList.toggle('open')">
+      <div class="sfaq-q">What if I can't afford to donate? <span class="sfaq-icon">+</span></div>
+      <div class="sfaq-a">Please use the app for free — that's exactly what it's here for. No guilt, no pressure. If you want to support for free, sharing the link with someone who might benefit is just as valuable.</div>
+    </div>
+    <div class="sfaq-item" onclick="this.classList.toggle('open')">
+      <div class="sfaq-q">Will the app remain free forever? <span class="sfaq-icon">+</span></div>
+      <div class="sfaq-a">Yes, the core planner will always be free. If we ever add premium features, they'll be genuinely optional — the full daily planner will never go behind a paywall.</div>
+    </div>
+    <div class="sfaq-item" onclick="this.classList.toggle('open')">
+      <div class="sfaq-q">Can I get a refund on a donation? <span class="sfaq-icon">+</span></div>
+      <div class="sfaq-a">Donations are non-refundable as they're voluntary gifts. If you made an error (wrong amount, accidental payment), contact us and we'll do our best to help.</div>
+    </div>
+    <div class="sfaq-item" onclick="this.classList.toggle('open')">
+      <div class="sfaq-q">What's the best way to support for free? <span class="sfaq-icon">+</span></div>
+      <div class="sfaq-a">Share the link in ADHD communities, leave a review on our Etsy shop, tell your therapist or doctor about it, or post about it on social media. Word of mouth keeps this project alive.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div style="margin-bottom:12px;">
+    <a href="index.html">Home</a> &nbsp;·&nbsp;
+    <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+    <a href="terms.html">Terms of Use</a> &nbsp;·&nbsp;
+    <a href="cookies.html">Cookie Policy</a> &nbsp;·&nbsp;
+    <a href="disclaimer.html">Disclaimer</a> &nbsp;·&nbsp;
+    <a href="support.html">Support Us</a>
+  </div>
+  © 2026 ADHD Daily Planner — Built with 💛 for ADHD brains everywhere.
+</footer>
+
+<script>
+let selectedAmount = '5';
+
+function setAmount(val){
+  selectedAmount = val;
+  document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('customAmt').value = '';
+  document.getElementById('donateBtn').textContent = '💛 Donate $' + val;
+}
+
+document.getElementById('customAmt').addEventListener('input', function(){
+  if(this.value){
+    selectedAmount = this.value;
+    document.querySelectorAll('.amount-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('donateBtn').textContent = '💛 Donate $' + this.value;
+  }
+});
+
+function copyAddress(){
+  const addr = document.getElementById('cryptoAddr').textContent;
+  navigator.clipboard.writeText(addr).then(()=>{
+    const el = document.getElementById('cryptoAddr');
+    const orig = el.textContent;
+    el.textContent = 'Copied! ✓';
+    setTimeout(()=>el.textContent=orig, 2000);
+  }).catch(()=>alert('Copy manually: ' + addr));
+}
+</script>
+</body>
+</html>

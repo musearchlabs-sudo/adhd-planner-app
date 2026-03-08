@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — ADHD Daily Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#09090d;--bg2:#111118;--bg3:#18181f;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#eeeef5;--muted:#6b6b8a;--muted2:#9090b0;--lime:#c9f135;--violet:#8b5cf6;--coral:#ff6b6b;--gold:#fbbf24;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;line-height:1.7;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:0.025;pointer-events:none;z-index:999;}
+nav{position:sticky;top:0;z-index:100;background:rgba(9,9,13,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:8px;}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--lime);}
+.nav-back{font-size:12px;color:var(--muted);text-decoration:none;font-weight:500;transition:color 0.2s;}
+.nav-back:hover{color:var(--lime);}
+.hero{padding:72px 24px 48px;text-align:center;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(139,92,246,0.05) 0%,transparent 100%);}
+.hero-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:14px;}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,7vw,72px);letter-spacing:2px;color:var(--text);line-height:0.95;margin-bottom:16px;}
+.hero-meta{font-size:13px;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;}
+.meta-chip{background:var(--bg3);border:1px solid var(--border);border-radius:999px;padding:4px 12px;font-size:11px;font-weight:600;}
+.content{max-width:740px;margin:0 auto;padding:56px 24px 96px;}
+.toc{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:48px;}
+.toc-title{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.toc-list a{font-size:13px;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
+.toc-list a::before{content:'';width:16px;height:1px;background:var(--border2);flex-shrink:0;}
+.toc-list a:hover{color:var(--lime);}
+.section{margin-bottom:48px;scroll-margin-top:72px;}
+.sec-num{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;color:var(--lime);margin-bottom:8px;}
+.sec-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.sec-body{font-size:14px;color:var(--muted2);font-weight:300;line-height:1.85;}
+.sec-body p{margin-bottom:14px;}
+.sec-body strong{color:var(--text);font-weight:600;}
+.sec-body ul{margin:12px 0 14px 20px;display:flex;flex-direction:column;gap:6px;}
+.sec-body ul li{font-size:14px;color:var(--muted2);}
+.highlight-box{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--lime);border-radius:0 12px 12px 0;padding:16px 18px;margin:16px 0;font-size:13px;color:var(--muted2);}
+.highlight-box strong{color:var(--lime);}
+.warn-box{background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.2);border-radius:12px;padding:16px 18px;margin:16px 0;font-size:13px;color:var(--muted2);}
+.warn-box strong{color:var(--coral);}
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:32px 24px;text-align:center;font-size:12px;color:var(--muted);}
+footer a{color:var(--lime);text-decoration:none;}
+@media(max-width:480px){nav{padding:0 16px;}.hero{padding:56px 16px 36px;}.content{padding:36px 16px 72px;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo"><div class="nav-dot"></div>ADHD PLANNER</a>
+  <a href="index.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Legal</div>
+  <h1 class="hero-title">PRIVACY<br>POLICY</h1>
+  <div class="hero-meta">
+    <span class="meta-chip">Last updated: March 2026</span>
+    <span class="meta-chip">Effective immediately</span>
+    <span class="meta-chip">GDPR compliant</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="toc">
+    <div class="toc-title">Table of Contents</div>
+    <ul class="toc-list">
+      <li><a href="#overview">1. Overview</a></li>
+      <li><a href="#data-collected">2. What Data We Collect</a></li>
+      <li><a href="#how-used">3. How We Use Your Data</a></li>
+      <li><a href="#storage">4. Data Storage</a></li>
+      <li><a href="#cookies">5. Cookies</a></li>
+      <li><a href="#third-parties">6. Third Parties</a></li>
+      <li><a href="#your-rights">7. Your Rights</a></li>
+      <li><a href="#children">8. Children's Privacy</a></li>
+      <li><a href="#changes">9. Changes to This Policy</a></li>
+      <li><a href="#contact">10. Contact Us</a></li>
+    </ul>
+  </div>
+
+  <div class="highlight-box"><strong>The short version:</strong> We collect almost nothing. Your planner data stays in your own browser. We don't sell, share, or store your personal information on any server.</div>
+
+  <div class="section" id="overview">
+    <div class="sec-num">01</div>
+    <div class="sec-title">Overview</div>
+    <div class="sec-body">
+      <p>ADHD Daily Planner ("we", "us", "our") operates the website and web application available at this domain. This Privacy Policy explains how we handle information when you use our free planner tool and visit our website.</p>
+      <p>We are committed to protecting your privacy. This tool was built for people managing ADHD — we understand that health-related data is sensitive, and we've designed the app so that <strong>your data never leaves your device</strong>.</p>
+    </div>
+  </div>
+
+  <div class="section" id="data-collected">
+    <div class="sec-num">02</div>
+    <div class="sec-title">What Data We Collect</div>
+    <div class="sec-body">
+      <p><strong>Data you enter in the planner (brain dump, tasks, habits, medication logs, etc.):</strong> This is stored exclusively in your browser's local storage. It is never transmitted to our servers, never seen by us, and never shared with anyone.</p>
+      <p><strong>Data collected automatically when you visit:</strong></p>
+      <ul>
+        <li>IP address (anonymised, via Cloudflare infrastructure)</li>
+        <li>Browser type and version</li>
+        <li>Operating system</li>
+        <li>Pages visited and time spent (aggregate, anonymised analytics only)</li>
+        <li>Referring URL</li>
+      </ul>
+      <p><strong>Data we do NOT collect:</strong></p>
+      <ul>
+        <li>Your name or email address (no account required)</li>
+        <li>Your ADHD diagnosis or health information</li>
+        <li>Your medication names or dosages</li>
+        <li>Your tasks, habits, or planner entries</li>
+        <li>Payment information (we don't process payments on this site)</li>
+      </ul>
+      <div class="highlight-box"><strong>Key fact:</strong> The planner works entirely client-side. Your data is stored using <code>localStorage</code> in your own browser — the same technology websites use to remember your preferences.</div>
+    </div>
+  </div>
+
+  <div class="section" id="how-used">
+    <div class="sec-num">03</div>
+    <div class="sec-title">How We Use Your Data</div>
+    <div class="sec-body">
+      <p>The limited anonymised technical data we collect is used solely to:</p>
+      <ul>
+        <li>Understand how many people use the app (aggregate counts only)</li>
+        <li>Identify and fix technical errors</li>
+        <li>Improve the performance and usability of the app</li>
+        <li>Protect the website against abuse</li>
+      </ul>
+      <p>We do <strong>not</strong> use your data for advertising, profiling, or any commercial purpose other than the above.</p>
+    </div>
+  </div>
+
+  <div class="section" id="storage">
+    <div class="sec-num">04</div>
+    <div class="sec-title">Data Storage</div>
+    <div class="sec-body">
+      <p>All planner data (your tasks, habits, mood, medication logs, reflections) is stored in your browser's <strong>localStorage</strong>. This means:</p>
+      <ul>
+        <li>It stays on your device only</li>
+        <li>Clearing your browser cache or history will delete it</li>
+        <li>It is not synced across devices</li>
+        <li>We have no access to it whatsoever</li>
+      </ul>
+      <p>Our website is hosted on <strong>Cloudflare Pages</strong>, which may retain server access logs for up to 30 days for security purposes. These logs contain anonymised IP addresses and are not linked to any personal identity.</p>
+    </div>
+  </div>
+
+  <div class="section" id="cookies">
+    <div class="sec-num">05</div>
+    <div class="sec-title">Cookies</div>
+    <div class="sec-body">
+      <p>We use minimal cookies. Specifically:</p>
+      <ul>
+        <li><strong>Essential cookies:</strong> Required for the website to function correctly (e.g. Cloudflare security cookies).</li>
+        <li><strong>No tracking cookies:</strong> We do not use Google Analytics, Meta Pixel, or any third-party tracking cookies.</li>
+        <li><strong>No advertising cookies:</strong> We run no ads and use no ad network cookies.</li>
+      </ul>
+      <p>You can disable cookies in your browser settings. This will not affect the core functionality of the planner.</p>
+    </div>
+  </div>
+
+  <div class="section" id="third-parties">
+    <div class="sec-num">06</div>
+    <div class="sec-title">Third Parties</div>
+    <div class="sec-body">
+      <p>We use the following third-party services to operate this website:</p>
+      <ul>
+        <li><strong>Cloudflare Pages</strong> — website hosting and CDN. Cloudflare's privacy policy applies to infrastructure-level data.</li>
+        <li><strong>Google Fonts</strong> — we load fonts (Bebas Neue, Plus Jakarta Sans) from Google's CDN. This may result in your IP being sent to Google's servers. You can disable this by using a browser extension like uBlock Origin.</li>
+      </ul>
+      <p>We do not use Facebook, TikTok, or any social media tracking pixels on this website.</p>
+      
+    </div>
+  </div>
+
+  <div class="section" id="your-rights">
+    <div class="sec-num">07</div>
+    <div class="sec-title">Your Rights</div>
+    <div class="sec-body">
+      <p>Under GDPR and UK GDPR, you have the right to:</p>
+      <ul>
+        <li><strong>Access</strong> — request what personal data we hold about you</li>
+        <li><strong>Erasure</strong> — request deletion of any data we hold</li>
+        <li><strong>Portability</strong> — receive your data in a portable format</li>
+        <li><strong>Objection</strong> — object to how we process your data</li>
+        <li><strong>Rectification</strong> — correct inaccurate data</li>
+      </ul>
+      <p>Because we collect almost no personal data, most of these rights have limited practical application. To exercise any right or ask a question, contact us at the address below.</p>
+      <div class="warn-box"><strong>Note:</strong> We cannot access or delete data stored in your own browser's localStorage. To delete your planner data, clear your browser's local storage or use your browser's "Clear Site Data" option.</div>
+    </div>
+  </div>
+
+  <div class="section" id="children">
+    <div class="sec-num">08</div>
+    <div class="sec-title">Children's Privacy</div>
+    <div class="sec-body">
+      <p>This service is intended for users aged 13 and over. We do not knowingly collect data from children under 13. If you believe a child under 13 has used this service and provided any personal information, please contact us and we will take steps to address this.</p>
+    </div>
+  </div>
+
+  <div class="section" id="changes">
+    <div class="sec-num">09</div>
+    <div class="sec-title">Changes to This Policy</div>
+    <div class="sec-body">
+      <p>We may update this Privacy Policy from time to time. When we do, we will update the "Last updated" date at the top of this page. We encourage you to review this page periodically. Continued use of the app after changes constitutes acceptance of the updated policy.</p>
+    </div>
+  </div>
+
+  <div class="section" id="contact">
+    <div class="sec-num">10</div>
+    <div class="sec-title">Contact Us</div>
+    <div class="sec-body">
+      <p>For any privacy-related questions, requests, or concerns, please contact us via our Etsy shop message system or at:</p>
+      <div class="highlight-box"><strong>Email:</strong> [musearchlabs@gmail.com]<br><strong>Etsy:</strong> <a href="https://etsy.com" style="color:var(--lime);">Your Etsy Shop Link</a><br><strong>Response time:</strong> Within 48 hours</div>
+      <p>You also have the right to lodge a complaint with your national data protection authority (e.g. the ICO in the UK, or your local EU supervisory authority).</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div style="margin-bottom:12px;">
+    <a href="index.html">Home</a> &nbsp;·&nbsp;
+    <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+    <a href="terms.html">Terms of Use</a> &nbsp;·&nbsp;
+    <a href="cookies.html">Cookie Policy</a> &nbsp;·&nbsp;
+    <a href="disclaimer.html">Disclaimer</a> &nbsp;·&nbsp;
+    <a href="support.html">Support Us</a>
+  </div>
+  © 2026 ADHD Daily Planner. All rights reserved.
+</footer>
+</body>
+</html>
